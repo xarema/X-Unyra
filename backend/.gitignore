@@ -1,15 +1,40 @@
 # ============================================================================
-# UNYRA - Global .gitignore
+# Unyra Backend - Django .gitignore
 # ============================================================================
 
 # ============================================================================
-# Python
+# Python & Virtual Environment
 # ============================================================================
+.venv/
+ENV/
+env/
+venv/
+bin/
+include/
+lib/
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
+
+# ============================================================================
+# Django
+# ============================================================================
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+/staticfiles/
+/media/
+.env
+.env.local
+.env.*.local
+*.pot
+
+# ============================================================================
+# Python Package Distribution
+# ============================================================================
 build/
 develop-eggs/
 dist/
@@ -28,80 +53,41 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-pip-log.txt
-pip-delete-this-directory.txt
 
-# Virtual environments
-.venv/
-ENV/
-env/
-venv/
-.env
-.env.local
-.env.*.local
-
-# Django
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-/staticfiles/
-/media/
-
-# pytest
+# ============================================================================
+# Testing & Coverage
+# ============================================================================
 .pytest_cache/
 .coverage
+.coverage.*
 htmlcov/
+.tox/
 .hypothesis/
+*.cover
 
-# mypy
+# ============================================================================
+# Type Checking
+# ============================================================================
 .mypy_cache/
 .dmypy.json
 dmypy.json
-
-# Pyre type checker
 .pyre/
 
 # ============================================================================
-# Flutter/Dart
-# ============================================================================
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.packages
-pubspec.lock
-build/
-.pub/
-.pub-cache/
-coverage/
-.DS_Store
-
-# Android/iOS
-/android/app/debug/
-/android/app/profile/
-/android/app/release/
-/ios/Flutter/.last_build_id
-*.ipa
-
-# ============================================================================
-# IDEs & Editors
+# IDE & Editors
 # ============================================================================
 .vscode/
 .idea/
 *.iml
 *.ipr
 *.iws
-.gradle/
-.classpath
-.project
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-*.sublime-project
+*.swp
+*.swo
+*~
+.DS_Store
 
 # ============================================================================
-# OS & System Files
+# OS Files
 # ============================================================================
 .DS_Store
 .DS_Store?
@@ -110,50 +96,29 @@ coverage/
 .Trashes
 ehthumbs.db
 Thumbs.db
-.AppleDouble
-.LSOverride
 
 # ============================================================================
-# Node.js (if needed)
+# Local Files
 # ============================================================================
-node_modules/
-npm-debug.log
-yarn-error.log
-
-# ============================================================================
-# Local Development
-# ============================================================================
-*.swp
-*.swo
-*~
 .tmp/
 temp/
 *.bak
+*.orig
+local_*.py
 
 # ============================================================================
-# IDE specific
+# Node (if using build tools)
 # ============================================================================
-.vs/
-*.user
-.vscode/settings.json
-.vscode/launch.json
-.vscode/extensions.json
+node_modules/
+npm-debug.log
 
 # ============================================================================
-# Build artifacts
+# Docker
 # ============================================================================
-.gradle/
-*.apk
-*.app
-*.aab
-*.ipa
-*.aar
+docker-compose.override.yml
 
 # ============================================================================
-# Screenshots & Media (local testing)
+# Logs
 # ============================================================================
-screenshots/
-*.png
-*.jpg
-*.jpeg
-*.gif
+*.log
+logs/
