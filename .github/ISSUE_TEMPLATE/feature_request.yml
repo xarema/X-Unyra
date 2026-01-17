@@ -1,0 +1,63 @@
+name: Feature Request
+description: Demander une nouvelle fonctionnalité
+title: "[Feature]: "
+labels: ["enhancement"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de proposer une nouvelle fonctionnalité pour Couple App!
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Décrivez la fonctionnalité que vous aimeriez voir
+      placeholder: |
+        Exemple: Je voudrais pouvoir...
+    validations:
+      required: true
+
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivation
+      description: Pourquoi cette fonctionnalité est-elle importante?
+      placeholder: Cela résoudrait...
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solution proposée
+      description: Votre idée de comment implémenter cela?
+      placeholder: |
+        Backend: ...
+        Frontend: ...
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorité
+      options:
+        - "🔥 Critique"
+        - "🟠 Haute"
+        - "🟡 Moyenne"
+        - "🟢 Basse"
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Composant affecté
+      options:
+        - "Backend (Django)"
+        - "Frontend (Flutter)"
+        - "API REST"
+        - "Base de données"
+        - "Authentification"
+        - "Couples"
+        - "Check-ins"
+        - "Questions & Réponses"
+        - "Lettres"
+        - "Objectifs"
+        - "Autre"

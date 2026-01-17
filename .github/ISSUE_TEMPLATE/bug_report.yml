@@ -1,0 +1,108 @@
+name: Bug Report
+description: Signaler un bug
+title: "[Bug]: "
+labels: ["bug"]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de signaler ce bug! Votre rapport aide à améliorer Couple App.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description du bug
+      description: Décrivez le problème clairement
+      placeholder: |
+        Exemple: Quand je fais X, il se passe Y au lieu de Z
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Étapes pour reproduire
+      description: Comment reproduire le bug?
+      placeholder: |
+        1. Aller à...
+        2. Cliquer sur...
+        3. Le bug apparaît...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportement attendu
+      description: Qu'est-ce que vous aviez attendu?
+      placeholder: Le bouton devrait...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Messages d'erreur
+      description: Collez les logs ou messages d'erreur (si applicable)
+      render: bash
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Composant affecté
+      options:
+        - "Backend (Django)"
+        - "Frontend (Flutter Web)"
+        - "Frontend (Flutter Mobile)"
+        - "API REST"
+        - "Authentification"
+        - "Couples"
+        - "Check-ins"
+        - "Questions & Réponses"
+        - "Lettres"
+        - "Objectifs"
+        - "Autre"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Sévérité
+      options:
+        - "🔥 Critique (app ne marche pas)"
+        - "🟠 Haute (feature cassée)"
+        - "🟡 Moyenne (problème mineur)"
+        - "🟢 Basse (problème cosmétique)"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Environnement
+
+  - type: input
+    id: os
+    attributes:
+      label: Système d'exploitation
+      placeholder: macOS 14, Windows 11, Ubuntu 22.04, etc.
+
+  - type: input
+    id: browser
+    attributes:
+      label: Navigateur (si applicable)
+      placeholder: Chrome 120, Safari 17, etc.
+
+  - type: input
+    id: version
+    attributes:
+      label: Version de l'app
+      placeholder: 0.1.0
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Informations supplémentaires
+      description: Autre contexte ou screenshots?
