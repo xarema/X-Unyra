@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Couple App MVP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .screen {
+            display: none;
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .screen.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-danger {
+            background: #ff6b6b;
+        }
+
+        .error {
+            background: #ffe0e0;
+            color: #c92a2a;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            background: #d3f9d8;
+            color: #2f9e44;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f0f0f0;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .nav-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            gap: 10px;
+            padding: 0 30px;
+            margin-bottom: 30px;
+        }
+
+        .nav-tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #999;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .nav-tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .card {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .card-subtitle {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        .card-text {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .slider-container {
+            margin-bottom: 20px;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button-group button {
+            flex: 1;
+        }
+
+        .centered {
+            text-align: center;
+        }
+
+        .icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 28px;
+        }
+
+        h3 {
+            margin-top: 20px;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .auth-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .auth-card {
+            text-align: center;
+        }
+
+        .auth-card .icon {
+            font-size: 80px;
+        }
+
+        .link {
+            color: #667eea;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-tabs {
+                padding: 0 15px;
+            }
+
+            .screen {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>❤️ Couple App</h1>
+            <div class="user-menu">
+                <span id="username">Chargement...</span>
+                <div class="avatar" onclick="logout()">👤</div>
+            </div>
+        </div>
+
+        <!-- Auth Screen -->
+        <div id="loginScreen" class="screen active auth-container">
+            <div class="auth-card">
+                <div class="icon">🔐</div>
+                <h2>Se connecter</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email ou Pseudo</label>
+                        <input type="text" id="loginEmail" required placeholder="votre@email.com ou pseudo">
+                    </div>
+                    <div class="form-group">
+                        <label>Mot de passe</label>
+                        <input type="password" id="loginPassword" required placeholder="••••••••">
+                    </div>
+                    <div id="loginError" class="error" style="display:none;"></div>
+                    <button type="submit" style="width:100%;">Se connecter</button>
+                    <p style="margin-top:20px; color:#666;">
+                        Pas encore inscrit? <a class="link" onclick="goToRegister()">S'inscrire</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Register Screen -->
+        <div id="registerScreen" class="screen auth-container">
+            <div class="auth-card">
+                <div class="icon">📝</div>
+                <h2>S'inscrire</h2>
+                <form onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Nom d'utilisateur</label>
+                        <input type="text" id="regUsername" required placeholder="username">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="regEmail" required placeholder="votre@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Mot de passe</label>
+                        <input type="password" id="regPassword" required placeholder="Min 4 caractères">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmer le mot de passe</label>
+                        <input type="password" id="regPasswordConfirm" required placeholder="Confirmez">
+                    </div>
+                    <div id="registerError" class="error" style="display:none;"></div>
+                    <button type="submit" style="width:100%;">S'inscrire</button>
+                    <p style="margin-top:20px; color:#666;">
+                        Déjà inscrit? <a class="link" onclick="goToLogin()">Se connecter</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Pairing Screen -->
+        <div id="pairingScreen" class="screen">
+            <h2>👥 Formation du couple</h2>
+            <div id="coupleStatus"></div>
+        </div>
+
+        <!-- Home Screen with Tabs -->
+        <div id="homeScreen" class="screen">
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('qna')">❓ Q&A</button>
+                <button class="nav-tab" onclick="switchTab('goals')">🎯 Objectifs</button>
+                <button class="nav-tab" onclick="switchTab('checkins')">💚 Check-in</button>
+                <button class="nav-tab" onclick="switchTab('letters')">💌 Lettres</button>
+            </div>
+
+            <!-- Q&A Tab -->
+            <div id="qnaTab" class="tab-content" style="display:block;">
+                <h3>Questions & Réponses</h3>
+                <button onclick="showCreateQuestion()" style="margin-bottom:20px;">+ Nouvelle question</button>
+                <div id="questionsList"></div>
+            </div>
+
+            <!-- Goals Tab -->
+            <div id="goalsTab" class="tab-content" style="display:none;">
+                <h3>Objectifs</h3>
+                <button onclick="showCreateGoal()" style="margin-bottom:20px;">+ Nouvel objectif</button>
+                <div id="goalsList"></div>
+            </div>
+
+            <!-- Check-ins Tab -->
+            <div id="checkinsTab" class="tab-content" style="display:none;">
+                <h3>Check-in quotidien</h3>
+                <button onclick="showCreateCheckin()" style="margin-bottom:20px;">+ Nouveau check-in</button>
+                <div id="checkinsList"></div>
+            </div>
+
+            <!-- Letters Tab -->
+            <div id="lettersTab" class="tab-content" style="display:none;">
+                <h3>Lettres mensuelles</h3>
+                <button onclick="showCreateLetter()" style="margin-bottom:20px;">+ Nouvelle lettre</button>
+                <div id="lettersList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== CONFIG ====================
+        const API_URL = 'http://localhost:8000/api';
+        let accessToken = localStorage.getItem('access_token');
+        let currentUser = null;
+        let currentCouple = null;
+
+        // ==================== UTILITY ====================
+        async function apiCall(method, endpoint, data = null) {
+            const options = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(accessToken && { 'Authorization': `Bearer ${accessToken}` })
+                }
+            };
+
+            if (data) options.body = JSON.stringify(data);
+
+            console.log(`📡 ${method} ${endpoint}`, data);
+
+            const response = await fetch(`${API_URL}${endpoint}`, options);
+            console.log(`📊 ${method} ${endpoint} → ${response.status} ${response.statusText}`);
+
+            if (!response.ok) {
+                let errorData;
+                const contentType = response.headers.get("content-type");
+                
+                try {
+                    if (contentType && contentType.includes("application/json")) {
+                        errorData = await response.json();
+                    } else {
+                        const text = await response.text();
+                        errorData = { detail: `Erreur ${response.status}: ${text.substring(0, 100)}${text.length > 100 ? '...' : ''}` };
+                    }
+                    console.error(`❌ Error response:`, errorData);
+                    throw errorData;
+                } catch (e) {
+                    if (e.detail || e.non_field_errors || Object.keys(e).length > 0) throw e;
+                    
+                    console.error(`❌ Error parsing response:`, e);
+                    throw {
+                        detail: `Erreur ${response.status}: ${response.statusText}`,
+                        status: response.status
+                    };
+                }
+            }
+            const data_response = await response.json();
+            console.log(`✅ Success:`, data_response);
+            return data_response;
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function showError(screenId, message) {
+            const errorEl = document.getElementById(screenId + 'Error');
+            if (errorEl) {
+                errorEl.textContent = message;
+                errorEl.style.display = 'block';
+            }
+        }
+
+        function hideError(screenId) {
+            const errorEl = document.getElementById(screenId + 'Error');
+            if (errorEl) errorEl.style.display = 'none';
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').style.display = 'block';
+
+            // Load data
+            if (tabName === 'qna') loadQuestions();
+            else if (tabName === 'goals') loadGoals();
+            else if (tabName === 'checkins') loadCheckins();
+            else if (tabName === 'letters') loadLetters();
+        }
+
+        // ==================== AUTH ====================
+        async function handleLogin(e) {
+            e.preventDefault();
+            hideError('login');
+
+            try {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+
+                if (!email || !password) {
+                    showError('login', 'Email et mot de passe requis');
+                    return;
+                }
+
+                console.log('🔐 Tentative de connexion:', { email });
+                const response = await apiCall('POST', '/auth/login/', { email, password });
+
+                accessToken = response.access;
+                localStorage.setItem('access_token', response.access);
+                localStorage.setItem('refresh_token', response.refresh);
+                currentUser = response.user;
+
+                console.log('✅ Connexion réussie:', currentUser.username);
+                // Vérifier le couple
+                await checkCouple();
+            } catch (error) {
+                console.error('❌ Login error:', error);
+                let errorMsg = 'Erreur de connexion';
+
+                if (typeof error === 'object') {
+                    if (error.detail) {
+                        errorMsg = error.detail;
+                    } else if (error.non_field_errors) {
+                        errorMsg = Array.isArray(error.non_field_errors) ? error.non_field_errors[0] : error.non_field_errors;
+                    } else {
+                        // Collect all other field errors
+                        const details = [];
+                        for (const key in error) {
+                            if (key !== 'status') {
+                                const val = Array.isArray(error[key]) ? error[key][0] : error[key];
+                                details.push(`${key}: ${val}`);
+                            }
+                        }
+                        if (details.length > 0) errorMsg = details.join(' | ');
+                    }
+                }
+
+                showError('login', errorMsg);
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            hideError('register');
+
+            try {
+                const username = document.getElementById('regUsername').value;
+                const email = document.getElementById('regEmail').value;
+                const password = document.getElementById('regPassword').value;
+                const passwordConfirm = document.getElementById('regPasswordConfirm').value;
+
+                if (password !== passwordConfirm) {
+                    showError('register', 'Les mots de passe ne correspondent pas');
+                    return;
+                }
+
+                console.log('📝 Tentative d\'inscription:', { username, email });
+                const response = await apiCall('POST', '/auth/register/', {
+                    username, email, password, password_confirm: passwordConfirm
+                });
+
+                accessToken = response.access;
+                localStorage.setItem('access_token', response.access);
+                localStorage.setItem('refresh_token', response.refresh);
+                currentUser = response.user;
+
+                // Vérifier le couple
+                await checkCouple();
+            } catch (error) {
+                console.error('Register error:', error);
+                let errorMsg = 'Erreur d\'inscription';
+
+                if (typeof error === 'object') {
+                    if (error.detail) {
+                        errorMsg = error.detail;
+                    } else if (error.non_field_errors) {
+                        errorMsg = Array.isArray(error.non_field_errors) ? error.non_field_errors[0] : error.non_field_errors;
+                    } else {
+                        // Collect all other field errors
+                        const details = [];
+                        for (const key in error) {
+                            if (key !== 'status') {
+                                const val = Array.isArray(error[key]) ? error[key][0] : error[key];
+                                details.push(`${key}: ${val}`);
+                            }
+                        }
+                        if (details.length > 0) errorMsg = details.join(' | ');
+                    }
+                }
+
+                showError('register', errorMsg);
+            }
+        }
+
+        function goToLogin() {
+            showScreen('loginScreen');
+        }
+
+        function goToRegister() {
+            showScreen('registerScreen');
+        }
+
+        async function logout() {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            accessToken = null;
+            currentUser = null;
+            currentCouple = null;
+            showScreen('loginScreen');
+        }
+
+        // ==================== COUPLE ====================
+        async function checkCouple() {
+            try {
+                currentCouple = await apiCall('GET', '/couple/');
+                showScreen('homeScreen');
+                loadQuestions();
+                updateUserDisplay();
+            } catch (error) {
+                // Pas de couple
+                showScreen('pairingScreen');
+                showPairingUI();
+            }
+        }
+
+        async function showPairingUI() {
+            const html = `
+                <div style="text-align:center; padding:40px;">
+                    <div style="font-size:80px; margin-bottom:20px;">❤️</div>
+                    <h3>Pas encore appairé</h3>
+                    <p style="color:#666; margin-bottom:30px;">Créez un couple ou rejoignez un partenaire</p>
+                    <button onclick="createCouple()" style="margin-right:10px;">Créer un couple</button>
+                    <button class="btn-secondary" onclick="showJoinForm()">Rejoindre un couple</button>
+                    <div id="joinForm" style="margin-top:30px; display:none;">
+                        <input type="text" id="codeInput" placeholder="Code (6 chiffres)" maxlength="6" style="max-width:200px;">
+                        <button onclick="joinCouple()" style="margin-top:10px;">Rejoindre</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('coupleStatus').innerHTML = html;
+        }
+
+        async function createCouple() {
+            try {
+                const response = await apiCall('POST', '/couple/create/');
+                currentCouple = response.couple;
+
+                // Generate invite code
+                const inviteResponse = await apiCall('POST', '/couple/invite/');
+                const code = inviteResponse.invite.code;
+
+                const html = `
+                    <div style="text-align:center; padding:40px;">
+                        <div style="font-size:80px; margin-bottom:20px;">🎉</div>
+                        <h3>Couple créé!</h3>
+                        <p style="color:#666; margin-bottom:20px;">Partagez ce code avec votre partenaire:</p>
+                        <div style="font-size:36px; font-weight:bold; letter-spacing:5px; background:#f0f0f0; padding:20px; border-radius:8px; margin-bottom:20px;">${code}</div>
+                        <button onclick="checkCouple()">Continuer</button>
+                    </div>
+                `;
+                document.getElementById('coupleStatus').innerHTML = html;
+            } catch (error) {
+                alert('Erreur: ' + (error.detail || error.toString()));
+            }
+        }
+
+        function showJoinForm() {
+            document.getElementById('joinForm').style.display = 'block';
+        }
+
+        async function joinCouple() {
+            try {
+                const code = document.getElementById('codeInput').value;
+                if (!code) {
+                    alert('Entrez le code');
+                    return;
+                }
+
+                const response = await apiCall('POST', '/couple/join/', { code });
+                currentCouple = response.couple;
+                showScreen('homeScreen');
+                loadQuestions();
+                updateUserDisplay();
+            } catch (error) {
+                alert('Erreur: ' + (error.detail || error.toString()));
+            }
+        }
+
+        // ==================== FEATURES ====================
+        function updateUserDisplay() {
+            document.getElementById('username').textContent = currentUser?.username || 'Utilisateur';
+        }
+
+        async function loadQuestions() {
+            try {
+                const response = await apiCall('GET', '/qna/questions/');
+                const questions = response.results || [];
+
+                const html = questions.length === 0 ?
+                    '<p style="color:#999;">Pas encore de questions</p>' :
+                    questions.map(q => `
+                        <div class="card">
+                            <div class="card-subtitle">${q.theme || 'Sans thème'}</div>
+                            <div class="card-title">${q.text}</div>
+                            <div class="card-text">${q.answers?.length || 0} réponses</div>
+                        </div>
+                    `).join('');
+
+                document.getElementById('questionsList').innerHTML = html;
+            } catch (error) {
+                console.error('Erreur Q&A:', error);
+            }
+        }
+
+        async function loadGoals() {
+            try {
+                const response = await apiCall('GET', '/goals/');
+                const goals = response.results || [];
+
+                const html = goals.length === 0 ?
+                    '<p style="color:#999;">Pas encore d\'objectifs</p>' :
+                    goals.map(g => `
+                        <div class="card">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <div class="card-title">${g.title}</div>
+                                <span style="font-size:12px; background:#${g.status === 'ACTIVE' ? 'green' : 'gray'}50; color:#${g.status === 'ACTIVE' ? '22863a' : '666'}; padding:4px 8px; border-radius:4px;">${g.status}</span>
+                            </div>
+                            <div class="card-text">${g.why_for_us || ''}</div>
+                            <div class="card-subtitle">${g.actions?.length || 0} actions</div>
+                        </div>
+                    `).join('');
+
+                document.getElementById('goalsList').innerHTML = html;
+            } catch (error) {
+                console.error('Erreur Goals:', error);
+            }
+        }
+
+        async function loadCheckins() {
+            try {
+                const response = await apiCall('GET', '/checkins/');
+                const checkins = response.results || [];
+
+                const html = checkins.length === 0 ?
+                    '<p style="color:#999;">Pas encore de check-in</p>' :
+                    checkins.map(c => `
+                        <div class="card">
+                            <div class="card-subtitle">${new Date(c.date).toLocaleDateString('fr-FR')}</div>
+                            <div class="stats">
+                                <div class="stat">
+                                    <div class="stat-label">Mood</div>
+                                    <div class="stat-value">${c.mood}/10</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-label">Stress</div>
+                                    <div class="stat-value">${c.stress}/10</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-label">Energy</div>
+                                    <div class="stat-value">${c.energy}/10</div>
+                                </div>
+                            </div>
+                            ${c.note ? `<div class="card-text" style="margin-top:10px;">${c.note}</div>` : ''}
+                        </div>
+                    `).join('');
+
+                document.getElementById('checkinsList').innerHTML = html;
+            } catch (error) {
+                console.error('Erreur Checkins:', error);
+            }
+        }
+
+        async function loadLetters() {
+            try {
+                const response = await apiCall('GET', '/letters/');
+                const letters = response.results || [];
+
+                const html = letters.length === 0 ?
+                    '<p style="color:#999;">Pas encore de lettres</p>' :
+                    letters.map(l => `
+                        <div class="card">
+                            <div class="card-subtitle">${l.month}</div>
+                            <div class="card-text">${l.content.substring(0, 150)}...</div>
+                        </div>
+                    `).join('');
+
+                document.getElementById('lettersList').innerHTML = html;
+            } catch (error) {
+                console.error('Erreur Letters:', error);
+            }
+        }
+
+        function showCreateQuestion() {
+            const text = prompt('Votre question:');
+            if (text) createQuestion(text);
+        }
+
+        async function createQuestion(text) {
+            try {
+                await apiCall('POST', '/qna/questions/', { text });
+                loadQuestions();
+            } catch (error) {
+                alert('Erreur: ' + (error.detail || error.toString()));
+            }
+        }
+
+        function showCreateGoal() {
+            const title = prompt('Titre du goal:');
+            if (title) createGoal(title);
+        }
+
+        async function createGoal(title) {
+            try {
+                await apiCall('POST', '/goals/', { title });
+                loadGoals();
+            } catch (error) {
+                alert('Erreur: ' + (error.detail || error.toString()));
+            }
+        }
+
+        function showCreateCheckin() {
+            const mood = prompt('Mood (1-10):', '5');
+            if (mood) {
+                const stress = prompt('Stress (1-10):', '5');
+                const energy = prompt('Energy (1-10):', '5');
+                createCheckin(parseInt(mood), parseInt(stress), parseInt(energy));
+            }
+        }
+
+        async function createCheckin(mood, stress, energy) {
+            try {
+                const today = new Date().toISOString().split('T')[0];
+                await apiCall('POST', '/checkins/', { date: today, mood, stress, energy });
+                loadCheckins();
+            } catch (error) {
+                alert('Erreur: ' + (error.detail || error.toString()));
+            }
+        }
+
+        function showCreateLetter() {
+            const now = new Date();
+            const month = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            const content = prompt('Votre lettre:');
+            if (content) createLetter(month, content);
+        }
+
+        async function createLetter(month, content) {
+            try {
+                await apiCall('POST', '/letters/', { month, content });
+                loadLetters();
+            } catch (error) {
+                alert('Erreur: ' + (error.detail || error.toString()));
+            }
+        }
+
+        // ==================== INIT ====================
+        window.addEventListener('load', async () => {
+            if (accessToken) {
+                try {
+                    currentUser = await apiCall('GET', '/auth/me/');
+                    currentUser = currentUser.user;
+                    await checkCouple();
+                    updateUserDisplay();
+                } catch (error) {
+                    // Token invalid
+                    localStorage.removeItem('access_token');
+                    showScreen('loginScreen');
+                }
+            } else {
+                showScreen('loginScreen');
+            }
+        });
+    </script>
+</body>
+</html>

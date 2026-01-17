@@ -1,0 +1,1 @@
+voir dossier d'instructions pour GitHub Copilot, dans docs/
